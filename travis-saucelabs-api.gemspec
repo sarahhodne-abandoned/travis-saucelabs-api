@@ -19,5 +19,5 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency('faraday', '~> 0.7')
   gem.add_runtime_dependency('faraday_middleware', '~> 0.9')
-  gem.add_runtime_dependency('thor', '~> 0.17')
+  gem.add_runtime_dependency('thor', '~> 0.14')
 end
