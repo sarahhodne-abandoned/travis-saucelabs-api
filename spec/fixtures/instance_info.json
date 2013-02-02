@@ -1,0 +1,1 @@
+{"public_ip": "10.10.10.10", "vnc_port": "5900", "FQDN": "vm1.example.com", "time_created": 1355294100.609689, "instance_id": "38257917-4fac-68fc-11f4-1575d2ec6847@api#vm1", "image_id": "ichef-osx8-10.8-working", "State": "Running", "private_ip": "10.10.20.10", "real_image_id": "ichef-osx8-10.8-working"}

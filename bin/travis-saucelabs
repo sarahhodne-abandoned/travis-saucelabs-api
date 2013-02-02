@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+require 'thor'
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+require 'travis-saucelabs-api'
+
+class TravisSaucelabs < Thor
+  desc 'list', 'Print a list of the currently running instances'
+  def list
+    instances = api.list_instances['instances']
+    instances.each do |instance_id|
+      info = api.instance_info(instance_id)
+      puts "Instance ID: #{info['instance_id']}"
+      info.each do |key, value|
+        puts "  #{key}: #{value}"
+      end
+      puts
+    end
+  end
+
+  desc 'start', 'Starts a new VM instance'
+  option :hostname
+  option :password
+  def start
+    startup_info = {}
+    startup_info[:hostname] = options[:hostname] if options[:hostname]
+    startup_info[:password] = options[:password] if options[:password]
+    instance_id = api.start_instance(Travis::SaucelabsAPI::DEFAULT_IMAGE, startup_info)['instance_id']
+    puts "Started instance with ID #{instance_id}"
+    print "Allowing outgoing connections..."
+    api.allow_outgoing(instance_id)
+    puts "done"
+  end
+
+  desc 'kill INSTANCE_ID', 'Kills the instance with the given instance ID'
+  def kill(instance_id)
+    puts api.kill_instance(instance_id)['message']
+  end
+
+  private
+
+  def api
+    @api ||= begin
+      unless ENV['TRAVIS_SAUCE_API_URI']
+        puts 'You need to set the TRAVIS_SAUCE_API_URI environment variable'
+        puts '  export TRAVIS_SAUCE_API_URI="http://user:password@api-endpoint:port"'
+        exit 1
+      end
+      Travis::SaucelabsAPI.new(ENV['TRAVIS_SAUCE_API_URI'])
+    end
+  end
+end
+
+TravisSaucelabs.start
