@@ -37,23 +37,23 @@ describe Travis::SaucelabsAPI do
 
     context 'with a different image' do
       before do
-        stub_post(endpoint, '/instances').with(query: { image: 'custom-image' }, body: { startup_info: {} }).to_return(body: fixture('start_instance.json'), headers: { content_type: 'text/html' })
+        stub_post(endpoint, '/instances').with(query: { image: 'custom-image' }).to_return(body: fixture('start_instance.json'), headers: { content_type: 'text/html' })
       end
 
       it 'requests the correct resource' do
-        api.start_instance({}, 'custom-image')
-        expect(a_post(endpoint, '/instances').with(query: { image: 'custom-image' }, body: { startup_info: {} })).to have_been_made
+        api.start_instance(nil, 'custom-image')
+        expect(a_post(endpoint, '/instances').with(query: { image: 'custom-image' })).to have_been_made
       end
     end
 
     context 'with startup info' do
       before do
-        stub_post(endpoint, '/instances').with(query: { image: Travis::SaucelabsAPI::DEFAULT_IMAGE }, body: { startup_info: { foo: 'bar' } }).to_return(body: fixture('start_instance.json'), headers: { content_type: 'text/html' })
+        stub_post(endpoint, '/instances').with(query: { image: Travis::SaucelabsAPI::DEFAULT_IMAGE }, body: { foo: 'bar' }).to_return(body: fixture('start_instance.json'), headers: { content_type: 'text/html' })
       end
 
       it 'requests the correct resource' do
         api.start_instance({ foo: 'bar' }, Travis::SaucelabsAPI::DEFAULT_IMAGE)
-        expect(a_post(endpoint, '/instances').with(query: { image: Travis::SaucelabsAPI::DEFAULT_IMAGE }, body: { startup_info: { foo: 'bar' } })).to have_been_made
+        expect(a_post(endpoint, '/instances').with(query: { image: Travis::SaucelabsAPI::DEFAULT_IMAGE }, body: { foo: 'bar' })).to have_been_made
       end
     end
   end

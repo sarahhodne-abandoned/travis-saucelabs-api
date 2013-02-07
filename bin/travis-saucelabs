@@ -21,10 +21,7 @@ class TravisSaucelabs < Thor
   option :hostname
   option :password
   def start
-    startup_info = {}
-    startup_info[:hostname] = options[:hostname] if options[:hostname]
-    startup_info[:password] = options[:password] if options[:password]
-    instance_id = api.start_instance(Travis::SaucelabsAPI::DEFAULT_IMAGE, startup_info)['instance_id']
+    instance_id = api.start_instance(startup_info)['instance_id']
     puts "Started instance with ID #{instance_id}"
     print "Allowing outgoing connections..."
     api.allow_outgoing(instance_id)
@@ -46,6 +43,17 @@ class TravisSaucelabs < Thor
         exit 1
       end
       Travis::SaucelabsAPI.new(ENV['TRAVIS_SAUCE_API_URI'])
+    end
+  end
+
+  def startup_info
+    if options[:hostname] || options[:password]
+      startup_info = {}
+      startup_info[:hostname] = options[:hostname] if options[:hostname]
+      startup_info[:password] = options[:password] if options[:password]
+      startup_info
+    else
+      nil
     end
   end
 end

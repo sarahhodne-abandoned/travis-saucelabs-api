@@ -27,7 +27,7 @@ module Travis
     end
 
     def start_instance(startup_info=nil, image=DEFAULT_IMAGE)
-      response = @connection.post('/instances', startup_info ? { :startup_info => startup_info } : nil) do |request|
+      response = @connection.post('/instances', startup_info) do |request|
         request.params.update(image: image)
       end
 
