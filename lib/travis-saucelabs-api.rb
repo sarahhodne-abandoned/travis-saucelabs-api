@@ -52,9 +52,13 @@ module Travis
       handle_response(@connection.post("/instances/#{instance_id}/allow_outgoing"))
     end
 
-    def save_image(instance_id)
+    def save_image(instance_id, name)
       instance_id = uri_escape(instance_id)
-      handle_response(@connection.post("/instances/#{instance_id}/save_image"))
+      response = @connection.post("/instances/#{instance_id}/save_image") do |request|
+        request.params.update(name: name)
+      end
+
+      handle_response(response)
     end
 
     private

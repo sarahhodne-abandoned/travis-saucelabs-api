@@ -33,6 +33,11 @@ class TravisSaucelabs < Thor
     puts api.kill_instance(instance_id)['message']
   end
 
+  desc 'save_image INSTANCE_ID NAME', 'Saves an image of instance with name'
+  def save_image(instance_id, name)
+    puts api.save_image(instance_id, name)['message']
+  end
+
   private
 
   def api

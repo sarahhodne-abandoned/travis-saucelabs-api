@@ -122,12 +122,12 @@ describe Travis::SaucelabsAPI do
 
   describe '#save_image' do
     before do
-      stub_post(endpoint, '/instances/38257917-4fac-68fc-11f4-1575d2ec6847@travis1%23itako13252/save_image').to_return(body: fixture('save_image.json'), content_type: 'text/html')
+      stub_post(endpoint, '/instances/38257917-4fac-68fc-11f4-1575d2ec6847@travis1%23itako13252/save_image?name=foo').to_return(body: fixture('save_image.json'), content_type: 'text/html')
     end
 
     it 'requests the correct resource' do
-      api.save_image('38257917-4fac-68fc-11f4-1575d2ec6847@travis1#itako13252')
-      expect(a_post(endpoint, '/instances/38257917-4fac-68fc-11f4-1575d2ec6847@travis1%23itako13252/save_image')).to have_been_made
+      api.save_image('38257917-4fac-68fc-11f4-1575d2ec6847@travis1#itako13252', 'foo')
+      expect(a_post(endpoint, '/instances/38257917-4fac-68fc-11f4-1575d2ec6847@travis1%23itako13252/save_image?name=foo')).to have_been_made
     end
   end
 
