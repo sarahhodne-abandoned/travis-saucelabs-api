@@ -33,6 +33,20 @@ class TravisSaucelabs < Thor
     puts api.kill_instance(instance_id)['message']
   end
 
+  desc 'kill_pid PID', 'Kills all instances belonging to a PID'
+  def kill_pid(pid)
+    instances = api.list_instances['instances'].select do |instance_id|
+      info = api.instance_info(instance_id)
+      info['extra_info'] &&
+        info['extra_info']['hostname'] &&
+        info['extra_info']['hostname'] =~ /^testing-saucelabs-mac-#{pid}/
+    end
+
+    instances.each do |instance_id|
+      kill(instance_id)
+    end
+  end
+
   desc 'save_image INSTANCE_ID NAME', 'Saves an image of instance with name'
   def save_image(instance_id, name)
     puts api.save_image(instance_id, name)['message']
