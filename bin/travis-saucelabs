@@ -52,6 +52,11 @@ class TravisSaucelabs < Thor
     puts api.save_image(instance_id, name)['message']
   end
 
+  desc 'allow_incoming INSTANCE_ID CIDR PORT', 'Opens an incoming port in the firewall'
+  def allow_incoming(instance_id, cidr, port)
+    puts api.allow_incoming(instance_id, cidr, port)['message']
+  end
+
   private
 
   def api

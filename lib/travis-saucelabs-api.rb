@@ -52,6 +52,15 @@ module Travis
       handle_response(@connection.post("/instances/#{instance_id}/allow_outgoing"))
     end
 
+    def allow_incoming(instance_id, cidr, port)
+      instance_id = uri_escape(instance_id)
+      response = @connection.post("/instances/#{instance_id}/allow_incoming") do |request|
+        request.params.update(cidr: cidr, port: port)
+      end
+
+      handle_response(response)
+    end
+
     def save_image(instance_id, name)
       instance_id = uri_escape(instance_id)
       response = @connection.post("/instances/#{instance_id}/save_image") do |request|
