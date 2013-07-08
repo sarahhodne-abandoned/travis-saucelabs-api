@@ -15,9 +15,7 @@ module Travis
     def initialize(uri)
       @connection = Faraday.new(uri) do |connection|
         connection.use FaradayMiddleware::EncodeJson
-        # TODO: Add ", content_type: /\bjson$/" to the end when the API
-        #   returns the correct content-type (currently it's text/html)
-        connection.use FaradayMiddleware::ParseJson
+        connection.use FaradayMiddleware::ParseJson, content_type: /\bjson$/
         connection.adapter Faraday.default_adapter
       end
     end
