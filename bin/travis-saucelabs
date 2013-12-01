@@ -20,8 +20,14 @@ class TravisSaucelabs < Thor
   desc 'start', 'Starts a new VM instance'
   option :hostname
   option :password
+  option :image
   def start
-    instance_id = api.start_instance(startup_info)['instance_id']
+    instance_id = if options[:image]
+      api.start_instance(startup_info, options[:image])['instance_id']
+    else
+      api.start_instance(startup_info)['instance_id']
+    end
+
     puts "Started instance with ID #{instance_id}"
     print "Allowing outgoing connections..."
     api.allow_outgoing(instance_id)
