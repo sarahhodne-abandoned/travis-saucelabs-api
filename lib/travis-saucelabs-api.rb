@@ -6,7 +6,7 @@ module Travis
   class SaucelabsAPI
     class NotFoundError < StandardError; end
 
-    DEFAULT_IMAGE = 'ichef-osx8-10.8-travis'
+    DEFAULT_IMAGE = 'ichef-travis-osx8-latest'
 
     # Public: Initialize a new API client instance
     #
