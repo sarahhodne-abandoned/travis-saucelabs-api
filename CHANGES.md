@@ -1,5 +1,11 @@
 # Changelog
 
+## Current
+
+- Change main class to be `Travis::SaucelabsAPI::Connection`.
+- Add `Travis::SaucelabsAPI::VirtualMachine` class which can be used to get
+  information from the `instance_info` data.
+
 ## v0.0.2
 
 - Add allow_incoming endpoint, which allows for opening incoming ports in the
