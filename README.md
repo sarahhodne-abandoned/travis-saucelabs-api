@@ -18,10 +18,12 @@ Or install it yourself as:
 
 ## Usage
 
+### Library
+
 ``` ruby
 require 'travis-saucelabs-api'
 
-api = Travis::SaucelabsAPI.new('http://user:password@api.example.com:1234')
+api = Travis::SaucelabsAPI::Connection.new('http://user:password@api.example.com:1234')
 
 # The available capacity for the cloud
 #
@@ -57,6 +59,28 @@ api.open_outgoing('38257917-4fac-68fc-11f4-1575d2ec6847@api#vm1')
 # Save a disk image from a running VM. Use this sparingly.
 api.save_image('38257917-4fac-68fc-11f4-1575d2ec6847@api#vm1')
 ```
+
+### CLI
+
+To use the CLI, you first need to tell it what the API endpoint is:
+
+    $ export TRAVIS_SAUCE_API_URI="http://user:password@api-endpoint:port"
+
+#### Start a new VM
+
+    $ travis-saucelabs start
+
+#### List information about all VMs
+
+    $ travis-saucelabs list
+
+#### Kill a VM
+
+    $ travis-saucelabs kill <instance-id>
+
+#### Kill all VMs belonging to a worker (by PID)
+
+    $ travis-saucelabs kill_pid <worker-pid>
 
 ## Contributing
 
