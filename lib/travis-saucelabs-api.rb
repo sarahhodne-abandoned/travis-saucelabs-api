@@ -4,7 +4,10 @@ require 'faraday_middleware'
 
 module Travis
   class SaucelabsAPI
-    class NotFoundError < StandardError; end
+    class Error < StandardError; end
+    class ClientError < Error; end
+    class ServerError < Error; end
+    class NotFoundError < ClientError; end
 
     DEFAULT_IMAGE = 'ichef-travis-osx8-latest'
 
@@ -71,7 +74,14 @@ module Travis
     private
 
     def handle_response(response)
-      raise NotFoundError if response.status == 404
+      case response.status
+      when 404
+        fail NotFoundError, response.body
+      when 400...500
+        fail ClientError, response.body
+      when 500...600
+        fail ServerError, response.body
+      end
 
       response.body
     end
