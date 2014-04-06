@@ -1,5 +1,5 @@
 module Travis
-  module SaucelabsAPI
+  class SaucelabsAPI
     VERSION = "0.0.2"
   end
 end

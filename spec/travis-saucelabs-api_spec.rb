@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe Travis::SaucelabsAPI do
   let(:endpoint) { 'http://user:password@travis-saucelabs.dev:1234' }
-  let(:api) { Travis::SaucelabsAPI::Connection.new(endpoint) }
+  let(:api) { Travis::SaucelabsAPI.new(endpoint) }
 
   describe '#capacity' do
     before do
-      stub_get(endpoint, '/capacity').to_return(body: fixture('capacity.json'), headers: { content_type: 'application/json' })
+      stub_get(endpoint, '/capacity').to_return(body: fixture('capacity.json'), headers: { content_type: 'text/html' })
     end
 
     it 'requests the correct resource' do
@@ -22,12 +22,12 @@ describe Travis::SaucelabsAPI do
   describe '#start_instance' do
     context 'with no parameters' do
       before do
-        stub_post(endpoint, '/instances').with(query: { image: Travis::SaucelabsAPI::Connection::DEFAULT_IMAGE }).to_return(body: fixture('start_instance.json'), headers: { content_type: 'application/json' })
+        stub_post(endpoint, '/instances').with(query: { image: Travis::SaucelabsAPI::DEFAULT_IMAGE }).to_return(body: fixture('start_instance.json'), headers: { content_type: 'text/html' })
       end
 
       it 'requests the correct resource' do
         api.start_instance
-        expect(a_post(endpoint, '/instances').with(query: { image: Travis::SaucelabsAPI::Connection::DEFAULT_IMAGE })).to have_been_made
+        expect(a_post(endpoint, '/instances').with(query: { image: Travis::SaucelabsAPI::DEFAULT_IMAGE })).to have_been_made
       end
 
       it 'returns the instance ID' do
@@ -37,7 +37,7 @@ describe Travis::SaucelabsAPI do
 
     context 'with a different image' do
       before do
-        stub_post(endpoint, '/instances').with(query: { image: 'custom-image' }).to_return(body: fixture('start_instance.json'), headers: { content_type: 'application/json' })
+        stub_post(endpoint, '/instances').with(query: { image: 'custom-image' }).to_return(body: fixture('start_instance.json'), headers: { content_type: 'text/html' })
       end
 
       it 'requests the correct resource' do
@@ -48,19 +48,19 @@ describe Travis::SaucelabsAPI do
 
     context 'with startup info' do
       before do
-        stub_post(endpoint, '/instances').with(query: { image: Travis::SaucelabsAPI::Connection::DEFAULT_IMAGE }, body: { foo: 'bar' }).to_return(body: fixture('start_instance.json'), headers: { content_type: 'application/json' })
+        stub_post(endpoint, '/instances').with(query: { image: Travis::SaucelabsAPI::DEFAULT_IMAGE }, body: { foo: 'bar' }).to_return(body: fixture('start_instance.json'), headers: { content_type: 'text/html' })
       end
 
       it 'requests the correct resource' do
-        api.start_instance({ foo: 'bar' }, Travis::SaucelabsAPI::Connection::DEFAULT_IMAGE)
-        expect(a_post(endpoint, '/instances').with(query: { image: Travis::SaucelabsAPI::Connection::DEFAULT_IMAGE }, body: { foo: 'bar' })).to have_been_made
+        api.start_instance({ foo: 'bar' }, Travis::SaucelabsAPI::DEFAULT_IMAGE)
+        expect(a_post(endpoint, '/instances').with(query: { image: Travis::SaucelabsAPI::DEFAULT_IMAGE }, body: { foo: 'bar' })).to have_been_made
       end
     end
   end
 
   describe '#list_instances' do
     before do
-      stub_get(endpoint, '/instances').to_return(body: fixture('instances.json'), headers: { content_type: 'application/json' })
+      stub_get(endpoint, '/instances').to_return(body: fixture('instances.json'), content_type: 'text/html')
     end
 
     it 'requests the correct resource' do
@@ -75,7 +75,7 @@ describe Travis::SaucelabsAPI do
 
   describe '#instance_info' do
     before do
-      stub_get(endpoint, '/instances/38257917-4fac-68fc-11f4-1575d2ec6847@travis1%23itako13252').to_return(body: fixture('instance_info.json'), headers: { content_type: 'application/json' })
+      stub_get(endpoint, '/instances/38257917-4fac-68fc-11f4-1575d2ec6847@travis1%23itako13252').to_return(body: fixture('instance_info.json'), content_type: 'text/html')
     end
 
     it 'requests the correct resource' do
@@ -100,7 +100,7 @@ describe Travis::SaucelabsAPI do
 
   describe '#kill_instance' do
     before do
-      stub_delete(endpoint, '/instances/38257917-4fac-68fc-11f4-1575d2ec6847@travis1%23itako13252').to_return(body: fixture('kill_instance.json'), content_type: 'application/json')
+      stub_delete(endpoint, '/instances/38257917-4fac-68fc-11f4-1575d2ec6847@travis1%23itako13252').to_return(body: fixture('kill_instance.json'), content_type: 'text/html')
     end
 
     it 'requests the correct resource' do
@@ -111,7 +111,7 @@ describe Travis::SaucelabsAPI do
 
   describe '#allow_outgoing' do
     before do
-      stub_post(endpoint, '/instances/38257917-4fac-68fc-11f4-1575d2ec6847@travis1%23itako13252/allow_outgoing').to_return(body: fixture('allow_outgoing.json'), content_type: 'application/json')
+      stub_post(endpoint, '/instances/38257917-4fac-68fc-11f4-1575d2ec6847@travis1%23itako13252/allow_outgoing').to_return(body: fixture('allow_outgoing.json'), content_type: 'text/html')
     end
 
     it 'requests the correct resource' do
@@ -122,7 +122,7 @@ describe Travis::SaucelabsAPI do
 
   describe '#save_image' do
     before do
-      stub_post(endpoint, '/instances/38257917-4fac-68fc-11f4-1575d2ec6847@travis1%23itako13252/save_image?name=foo').to_return(body: fixture('save_image.json'), content_type: 'application/json')
+      stub_post(endpoint, '/instances/38257917-4fac-68fc-11f4-1575d2ec6847@travis1%23itako13252/save_image?name=foo').to_return(body: fixture('save_image.json'), content_type: 'text/html')
     end
 
     it 'requests the correct resource' do
